@@ -7,6 +7,7 @@ const clubRoutes = require('./routes/clubRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const uploadRoutes = require('./routes/uploadRoutes');
 const complaintRoutes = require('./routes/complaintRoutes');
+const managementPersonRoutes = require('./routes/managementPersonRoutes');
 
 const app = express();
 
@@ -34,6 +35,7 @@ app.use('/api/club', clubRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/complaints', complaintRoutes);
+app.use('/api/management', managementPersonRoutes);
 
 
 // Fallback Route for Undefined API Paths (404)
