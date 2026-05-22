@@ -34,3 +34,17 @@ exports.uploadMedia = async (req, res, next) => {
     });
   }
 };
+
+exports.destroyMedia = async (req, res, next) => {
+  try {
+    const { public_id, resource_type } = req.body;
+    if (!public_id) {
+      return res.status(400).json({ success: false, message: 'public_id is required' });
+    }
+    const result = await cloudinary.uploader.destroy(public_id, { resource_type: resource_type || 'image' });
+    res.status(200).json({ success: true, result });
+  } catch (error) {
+    console.error('Cloudinary destroy error:', error);
+    res.status(500).json({ success: false, message: 'Failed to delete media', error: error.message });
+  }
+};

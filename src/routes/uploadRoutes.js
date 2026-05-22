@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const protectAdmin = require('../middleware/auth');
-const { uploadMedia } = require('../controllers/uploadController');
+const { uploadMedia, destroyMedia } = require('../controllers/uploadController');
 const ClubInfo = require('../models/ClubInfo');
 
 const storage = multer.memoryStorage();
@@ -44,5 +44,6 @@ const dynamicMulter = async (req, res, next) => {
 };
 
 router.post('/', protectAdmin, dynamicMulter, uploadMedia);
+router.post('/destroy', protectAdmin, destroyMedia);
 
 module.exports = router;

@@ -30,13 +30,28 @@ exports.createEvent = async (req, res, next) => {
 // @access  Private/Admin
 exports.updateEvent = async (req, res, next) => {
   try {
+    const oldEvent = await Event.findById(req.params.id);
+    if (!oldEvent) {
+      return res.status(404).json({ success: false, message: 'Event not found' });
+    }
+
+    if (req.body.media && Array.isArray(req.body.media)) {
+      const newMediaIds = req.body.media.map(m => m.public_id).filter(Boolean);
+      const removedMedia = oldEvent.media.filter(m => m.public_id && !newMediaIds.includes(m.public_id));
+      
+      for (const m of removedMedia) {
+        try {
+          await cloudinary.uploader.destroy(m.public_id, { resource_type: m.type === 'video' ? 'video' : 'image' });
+        } catch (err) {
+          console.error('Failed to delete removed media from Cloudinary', err);
+        }
+      }
+    }
+
     const event = await Event.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true
     });
-    if (!event) {
-      return res.status(404).json({ success: false, message: 'Event not found' });
-    }
     res.status(200).json({ success: true, data: event });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server Error updating event', error: error.message });
