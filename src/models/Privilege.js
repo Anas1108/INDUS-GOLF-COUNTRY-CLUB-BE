@@ -26,7 +26,14 @@ const PrivilegeSchema = new mongoose.Schema({
     type: String,
     default: 'CLUB PRIVILEGE',
     trim: true
-  }
+  },
+  details: [{
+    type: { type: String, enum: ['text', 'list', 'image'], default: 'text' },
+    title: { type: String, trim: true },
+    content: { type: String, trim: true }, // Used for text type
+    items: [{ type: String, trim: true }], // Used for list type
+    imageUrl: { type: String, trim: true } // Used for image type
+  }]
 }, {
   timestamps: true
 });
