@@ -72,7 +72,51 @@ const verifyAdmin = async (req, res, next) => {
   }
 };
 
+// @desc    Update admin credentials
+// @route   PUT /api/admin/credentials
+// @access  Private
+const updateCredentials = async (req, res, next) => {
+  try {
+    const { currentPassword, newUsername, newPassword } = req.body;
+    
+    // req.admin.id is set by protectAdmin middleware
+    const admin = await Admin.findById(req.admin.id);
+    if (!admin) {
+      return res.status(404).json({ success: false, message: 'Admin not found' });
+    }
+
+    // Verify current password
+    const isMatch = await admin.comparePassword(currentPassword);
+    if (!isMatch) {
+      return res.status(401).json({ success: false, message: 'Incorrect current password' });
+    }
+
+    // Update username if provided
+    if (newUsername) {
+      admin.username = newUsername.toLowerCase();
+    }
+
+    // Update password if provided
+    if (newPassword) {
+      admin.password = newPassword;
+    }
+
+    await admin.save();
+
+    res.status(200).json({
+      success: true,
+      message: 'Credentials updated successfully'
+    });
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ success: false, message: 'Username already exists' });
+    }
+    next(error);
+  }
+};
+
 module.exports = {
   loginAdmin,
-  verifyAdmin
+  verifyAdmin,
+  updateCredentials
 };

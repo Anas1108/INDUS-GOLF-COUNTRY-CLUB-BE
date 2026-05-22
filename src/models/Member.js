@@ -20,10 +20,7 @@ const MemberSchema = new mongoose.Schema({
     type: String,
     trim: true
   },
-  cnic: {
-    type: String,
-    trim: true
-  },
+
   dob: {
     type: String,
     trim: true
@@ -32,20 +29,11 @@ const MemberSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  category: {
-    type: String,
-    required: [true, 'Category/Designation is required'],
-    trim: true
-  },
   valid_upto: {
     type: String,
     default: null
   },
-  card_style: {
-    type: String,
-    enum: ['gold-luxury', 'classic-green'],
-    default: 'classic-green'
-  },
+
   photo_url: {
     type: String,
     default: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=400' // Default fallback photo
