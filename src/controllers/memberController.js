@@ -87,10 +87,13 @@ exports.createMember = async (req, res, next) => {
 
 // @desc    Update member details
 // @route   PUT /api/members/:id
-// @access  Public
+// @access  Private
 exports.updateMember = async (req, res, next) => {
   try {
-    let member = await Member.findById(req.params.id);
+    const member = await Member.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    });
 
     if (!member) {
       return res.status(404).json({
@@ -98,11 +101,6 @@ exports.updateMember = async (req, res, next) => {
         message: `Member with ID ${req.params.id} not found`
       });
     }
-
-    member = await Member.findByIdAndUpdate(req.params.id, req.body, {
-      new: true,
-      runValidators: true
-    });
 
     res.status(200).json({
       success: true,
@@ -117,20 +115,16 @@ exports.updateMember = async (req, res, next) => {
         errors: messages
       });
     }
-    res.status(500).json({
-      success: false,
-      message: 'Server Error updating member',
-      error: error.message
-    });
+    next(error);
   }
 };
 
 // @desc    Delete member
 // @route   DELETE /api/members/:id
-// @access  Public
+// @access  Private
 exports.deleteMember = async (req, res, next) => {
   try {
-    const member = await Member.findById(req.params.id);
+    const member = await Member.findByIdAndDelete(req.params.id);
 
     if (!member) {
       return res.status(404).json({
@@ -139,18 +133,12 @@ exports.deleteMember = async (req, res, next) => {
       });
     }
 
-    await Member.findByIdAndDelete(req.params.id);
-
     res.status(200).json({
       success: true,
       data: {},
       message: 'Member successfully removed'
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: 'Server Error deleting member',
-      error: error.message
-    });
+    next(error);
   }
 };

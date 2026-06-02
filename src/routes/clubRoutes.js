@@ -15,38 +15,39 @@ const {
   getSections,
   updateSection
 } = require('../controllers/clubController');
+const protectAdmin = require('../middleware/auth');
 
-// Aggregated full payload route
+// Aggregated full payload route (public read)
 router.get('/data', getClubData);
 
 // Metadata routes
 router.route('/info')
   .get(getClubInfo)
-  .put(updateClubInfo);
+  .put(protectAdmin, updateClubInfo);
 
 // Privileges CRUD routes
 router.route('/privileges')
   .get(getPrivileges)
-  .post(createPrivilege);
+  .post(protectAdmin, createPrivilege);
 
 router.route('/privileges/:id')
-  .put(updatePrivilege)
-  .delete(deletePrivilege);
+  .put(protectAdmin, updatePrivilege)
+  .delete(protectAdmin, deletePrivilege);
 
 // Terms CRUD routes
 router.route('/terms')
   .get(getTerms)
-  .post(createTerm);
+  .post(protectAdmin, createTerm);
 
 router.route('/terms/:id')
-  .put(updateTerm)
-  .delete(deleteTerm);
+  .put(protectAdmin, updateTerm)
+  .delete(protectAdmin, deleteTerm);
 
 // Sections CRUD routes
 router.route('/sections')
   .get(getSections);
 
 router.route('/sections/:section_id')
-  .put(updateSection);
+  .put(protectAdmin, updateSection);
 
 module.exports = router;

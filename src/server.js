@@ -2,6 +2,15 @@ const path = require('path');
 // Load environment variables from BE/.env
 require('dotenv').config({ path: path.join(__dirname, '..', '.env') });
 
+// Fail fast if required env vars are missing
+const requiredEnv = ['MONGODB_URI', 'JWT_SECRET', 'CLOUDINARY_CLOUD_NAME', 'CLOUDINARY_API_KEY', 'CLOUDINARY_API_SECRET'];
+const missingEnv = requiredEnv.filter(key => !process.env[key]);
+if (missingEnv.length) {
+  console.error(`\x1b[31m%s\x1b[0m`, `Missing required environment variables: ${missingEnv.join(', ')}`);
+  console.error(`\x1b[33m%s\x1b[0m`, 'Copy BE/.env.example to BE/.env and fill in the values.');
+  process.exit(1);
+}
+
 const app = require('./app');
 const connectDB = require('./config/db');
 
