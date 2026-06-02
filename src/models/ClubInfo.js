@@ -17,6 +17,8 @@ const ClubInfoSchema = new mongoose.Schema({
   motto: { type: String, trim: true },
   affiliations: [{ type: String, trim: true }],
   upload_limit_mb: { type: Number, default: 50 },
+  bg_video_url: { type: String, trim: true },
+  bg_video_public_id: { type: String, trim: true },
   contact: ContactSchema,
   infrastructure: InfrastructureSchema
 }, {

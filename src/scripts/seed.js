@@ -36,13 +36,17 @@ const seedDB = async () => {
     const clubData = JSON.parse(rawData);
 
     // 0. Seed Admin Credentials
+    const seedUser = process.env.SEED_ADMIN_USER;
+    const seedPass = process.env.SEED_ADMIN_PASS;
+    if (!seedUser || !seedPass) {
+      console.error('\x1b[31m%s\x1b[0m', 'Seeding aborted: SEED_ADMIN_USER and SEED_ADMIN_PASS must be set in BE/.env before seeding.');
+      await mongoose.connection.close();
+      process.exit(1);
+    }
     console.log('Cleaning and seeding admins collection...');
     await Admin.deleteMany();
-    await Admin.create([
-      { username: 'admin', password: '12345678' },
-      { username: 'name', password: '12345678' }
-    ]);
-    console.log('Admin accounts successfully seeded.');
+    await Admin.create([{ username: seedUser.toLowerCase(), password: seedPass }]);
+    console.log('Admin account successfully seeded.');
 
     // 1. Seed Club Info
     console.log('Cleaning and seeding club_info collection...');
@@ -71,12 +75,9 @@ const seedDB = async () => {
       name: member.name,
       father_spouse_name: member.father_spouse_name,
       address: member.address,
-      cnic: member.cnic,
       dob: member.dob,
       handicap: Number(member.handicap) || 0,
-      category: member.category,
       valid_upto: member.valid_upto,
-      card_style: member.card_style || 'classic-green',
       photo_url: member.photo_url,
       signatory: member.signatory || 'Club Management'
     }));

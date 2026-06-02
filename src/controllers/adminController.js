@@ -38,7 +38,7 @@ const loginAdmin = async (req, res, next) => {
     // Generate JWT token valid for 1 day
     const token = jwt.sign(
       { id: admin._id, username: admin.username },
-      process.env.JWT_SECRET || 'super_secret_jwt_key_indus_golf_club',
+      process.env.JWT_SECRET,
       { expiresIn: '1d' }
     );
 
