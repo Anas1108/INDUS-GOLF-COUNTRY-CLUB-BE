@@ -130,6 +130,17 @@ const seedDB = async () => {
         subtitle: 'CLUB GOVERNANCE & REGISTRY',
         description: 'We proudly introduce the executive board, military commanders, and key administrative officers managing the prestigious Indus Golf & Country Club.',
         list_items: []
+      },
+      {
+        section_id: 'marquee',
+        title: 'Marquee Announcements',
+        subtitle: 'LIVE FEED',
+        description: 'WELCOME TO INDUS GOLF & COUNTRY CLUB ATTOCK CANTT • EXPERIENCE THE PERFECT HARMONY OF GOURMET DINING, STATE-OF-THE-ART VIRTUAL GOLF SIMULATOR BAYS, AND PREMIUM SOCIAL PRIVILEGES •',
+        list_items: [],
+        extra_data: {
+          visible: true,
+          speed: 30
+        }
       }
     ];
 

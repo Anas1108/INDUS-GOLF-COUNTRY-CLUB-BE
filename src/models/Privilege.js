@@ -31,7 +31,7 @@ const PrivilegeSchema = new mongoose.Schema({
     type: { type: String, enum: ['text', 'list', 'image'], default: 'text' },
     title: { type: String, trim: true },
     content: { type: String, trim: true }, // Used for text type
-    items: [{ type: String, trim: true }], // Used for list type
+    items: [mongoose.Schema.Types.Mixed], // Used for list type (can be String or { text, imageUrl })
     imageUrl: { type: String, trim: true } // Used for image type
   }]
 }, {
