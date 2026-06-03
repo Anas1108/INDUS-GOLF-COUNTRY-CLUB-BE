@@ -15,7 +15,11 @@ const app = express();
 
 // Middlewares
 app.use(helmet());
-app.use(cors({ origin: process.env.FRONTEND_URL || 'http://localhost:3000' }));
+const allowedOrigins = [
+  'http://localhost:3000',
+  ...(process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',').map(s => s.trim()) : [])
+];
+app.use(cors({ origin: allowedOrigins, credentials: true }));
 app.use(express.json()); // Body parser
 
 // Dev request logging
